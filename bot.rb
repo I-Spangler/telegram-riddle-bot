@@ -1,6 +1,6 @@
 require 'telegram/bot'
-
-token = '318308389:AAE4smaQ8529Ol2XjonSdO9LUvTMs-EFAzk'
+#important: set bot privacy to disabled in botfather
+token = '<bot_token>'
 
 Telegram::Bot::Client.run(token) do |bot|
   $riddle = ""
