@@ -12,7 +12,8 @@ Telegram::Bot::Client.run(token) do |bot|
 
   bot.listen do |message|
   
-    cmd = message.text.split()
+    cmd = message.text
+
     if write == true
       $riddle = message.text
       write = false
@@ -22,7 +23,7 @@ Telegram::Bot::Client.run(token) do |bot|
         $counter = {}
     end
     puts "message from: #{message.from.first_name} text: #{message.text}"
-    case cmd[0]
+    case cmd
       when '/start'
         bot.api.send_message(chat_id: message.chat.id, text: "Game starts, #{message.from.last_name}")
         off = false
@@ -32,14 +33,12 @@ Telegram::Bot::Client.run(token) do |bot|
         bot.api.send_message(chat_id: message.chat.id, text: "/start to start the game,
         /new for new puzzle, /rules for the rules,
         /remember to display the current puzzle again,
-        /off to send texts without being counted
-        /on to return to the game,
         /score to see the actual score
         /win for when you guys win
         /lose for when you guys lose
         /help to show this help")
       when '/rules'
-        bot.api.send_message(chat_id: message.chat.id, text: "There is no rules")
+        bot.api.send_message(chat_id: message.chat.id, text: "Messages ended with a '?' are counted. Other messages are not.")
       when '/new'
         bot.api.send_message(chat_id: message.chat.id, text: "Send new riddle")
         write = true
@@ -53,17 +52,13 @@ Telegram::Bot::Client.run(token) do |bot|
         bot.api.send_message(chat_id: message.chat.id, text: "You lose.")
         $counter = {}
         off = true
-      when '/off'
-        off = true
-      when '/on'
-        off = false
       when '/score'
         bot.api.send_message(chat_id: message.chat.id, text: "Questions asked: #{$counter[message.from.id]}")
       when '/setlimit'
         $limit = cmd[1]
         puts "#{$limit}"
       else
-        if off == false and $counter != nil
+        if message.text[-1] == "?" and $counter[message.from.id] and off == false
           $counter[message.from.id] += 1
         end
     end
