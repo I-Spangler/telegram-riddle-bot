@@ -1,3 +1,2 @@
 # telegram-riddle-bot
-Naive bot for Q&amp;A games on telegram
-has some issues
+Bot for Q&amp;A games on telegram using ruby wrapper
