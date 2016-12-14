@@ -20,13 +20,13 @@ Telegram::Bot::Client.run(token) do |bot|
         write = false
       end
       if $counter[message.from.id] == $limit
-          bot.api.send_message(chat_id: message.chat.id, text: "You lose.")
+          bot.api.send_message(chat_id: message.chat.id, text: "You took too long, you lose.")
           $counter = {}
       end
       puts "message from: #{message.from.first_name} text: #{message.text}"
       case cmd
         when '/start'
-          bot.api.send_message(chat_id: message.chat.id, text: "Game starts, #{message.from.last_name}")
+          bot.api.send_message(chat_id: message.chat.id, text: "The game is on, #{message.from.last_name}")
           off = false
           $users << message.from.last_name
           $counter[message.from.id] = 0
@@ -41,12 +41,12 @@ Telegram::Bot::Client.run(token) do |bot|
         when '/rules'
           bot.api.send_message(chat_id: message.chat.id, text: "Messages ended with a '?' are counted. Other messages are not.")
         when '/new'
-          bot.api.send_message(chat_id: message.chat.id, text: "Send new riddle")
+          bot.api.send_message(chat_id: message.chat.id, text: "Today's case is:")
           write = true
         when '/remember'
           bot.api.send_message(chat_id: message.chat.id, text: "\"#{$riddle[message.from.id]}\"")
         when '/win'
-          bot.api.send_message(chat_id: message.chat.id, text: "You solved it! Congratulations, #{$users}")
+          bot.api.send_message(chat_id: message.chat.id, text: "Elementary, my dear #{$users}")
           $counter = {}
           off = true
         when '/lose'
